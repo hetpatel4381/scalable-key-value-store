@@ -2,14 +2,15 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Dict
 from huey import RedisHuey
+import os
 
 app = FastAPI()
 
-huey = RedisHuey('my-app')
+redis_host = os.environ.get("REDIS_HOST", "localhost")
+huey = RedisHuey('my-app', host=redis_host)
 
 # In-memory key-value store
 store: Dict[str, str] = {}
-
 
 class Item(BaseModel):
     key: str
